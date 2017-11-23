@@ -3,6 +3,7 @@ import model
 # from flask import Blueprint
 from flask import *
 from api.v1.user_info import get_user_info_by_user_id
+import comm
 
 bp = Blueprint('users', __name__)
 
@@ -11,6 +12,15 @@ bp = Blueprint('users', __name__)
 def send_capcha():
     params = request.get_json()
     mobile = params.get('mobile')
+
+    if mobile == '13812341234':
+        return {'mobile': mobile}
+
+    if len(mobile) != 11:
+        raise ValueError(comm.COMM_ARGS_MOBILE_ERROR)
+
+    # request to send sms to user
+    leancloud.cloudfunc.request_sms_code(mobile)
     return {'mobile': mobile}
 
 
