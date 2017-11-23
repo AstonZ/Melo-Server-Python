@@ -1,7 +1,8 @@
-import model.base_model
+from model.base_model import BaseModel
+
 
 # inherit from leancloud model
-class UserInfo(model.base_model.BaseModel):
+class UserInfo(BaseModel):
     def __init__(self):
-        attrs=['user','nickname','avatar','location','type']
+        attrs = ['user', 'nickname', 'avatar', 'location', 'type']
         super().__init__(attrs)
