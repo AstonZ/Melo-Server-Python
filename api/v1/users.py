@@ -7,13 +7,20 @@ import comm
 
 bp = Blueprint('users', __name__)
 
+# 测试账号 固定验证码 500471
+test_mobile = '13812341234'
+
 
 @bp.route('/captcha', methods=['POST'])
 def send_capcha():
+    """
+    @api {post} v1/users/captcha 发送短信验证码
+
+    """
     params = request.get_json()
     mobile = params.get('mobile')
 
-    if mobile == '13812341234':
+    if mobile == test_mobile:
         return {'mobile': mobile}
 
     if len(mobile) != 11:
@@ -44,6 +51,7 @@ def register():
     mobile = params.get('mobile')
     captcha = params.get('captcha')
     password = params.get('password')
+
     # leancloud 自带用户指针模型  使用验证码注册
     user = leancloud.User.signup_or_login_with_mobile_phone(mobile, str(captcha))
 
@@ -54,13 +62,13 @@ def register():
     is_first_login = False
     user_info = model.UserInfo.query.equal_to('user', user).find()
 
-    # already exist userinfo
+    # already exist userInfo
     if len(user_info) > 0:
         user_info = user_info[0]
     else:  # first login user
         is_first_login = True
 
-        # sava user and userInfo
+        # save user and userInfo
         user_info = model.UserInfo()
         user_info.set_user(user)
         user_info.save()

@@ -6,13 +6,12 @@ from api.v1 import *
 import leancloud
 # from config import LC_AppID, LC_MasterKey
 from leancloud import logging
-import model
 
 is_prd = False
 
 app = base.MLFlask(__name__)
 
-leancloud.init('DXY29E1Fr9hDeubTIrrskf7m','BCQikimy4Dwu4Odpy3Nbk8Dc')
+leancloud.init(app_id='DXY29E1Fr9hDeubTIrrskf7m-gzGzoHsz', master_key='BCQikimy4Dwu4Odpy3Nbk8Dc')
 logging.basicConfig(level=logging.DEBUG)
 
 # register blueprint
