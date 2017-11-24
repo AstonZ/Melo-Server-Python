@@ -6,7 +6,7 @@ import comm
 bp = Blueprint('upload', __name__)
 
 
-@bp.route('/uploadImg', methods=['POST'])
+@bp.route('', methods=['POST'])
 @comm.login_required
 def upload_file():
     uploader = request.files['file']

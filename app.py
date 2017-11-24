@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.DEBUG)
 # register blueprint
 app.register_blueprint(users.bp, url_prefix='/v1/users')
 app.register_blueprint(upload.bp, url_prefix='/v1/upload')
-
+app.register_blueprint(user_info.bp, url_prefix='/v1/userInfo')
 
 @app.route('/index')
 def index():
