@@ -9,6 +9,7 @@ bp = Blueprint('users', __name__)
 
 # 测试账号 固定验证码 500471
 test_mobile = '13812341234'
+is_PRD = False
 
 
 @bp.route('/captcha', methods=['POST'])
@@ -60,11 +61,12 @@ def register():
         user.refresh_session_token()
 
     is_first_login = False
-    user_info = model.UserInfo.query.equal_to('user', user).find()
+    print("user.id is {}".format(user.id))
+    user_infos = model.UserInfo.query.equal_to('user', user).find()
 
     # already exist userInfo
-    if len(user_info) > 0:
-        user_info = user_info[0]
+    if len(user_infos) > 0:
+        user_info = user_infos[0]
     else:  # first login user
         is_first_login = True
 
@@ -84,10 +86,45 @@ def register():
 
     token = leancloud.User.get_current().get_session_token()
 
-    return {
+    result = {
         "token": token,
         "isFirstLogin": is_first_login,
         "userId": user.id,
         "userInfo": get_user_info_by_user_id(user.id, user_info)
+    }
+
+    print("register result is {}".format(result))
+
+    return result
+
+
+@bp.route('/loginPassword', methods=['POST'])
+def login_password():
+    """
+    @api {POST} v1/users/loginPassword 使用密码登陆
+    @apiGroup None
+    @apiPermission None
+
+    @apiParam {String} mobile
+    @apiParam {String} password
+
+    @:return user with user info
+    """
+    params = request.get_json()
+    mobile = params.get('mobile')
+    password = params.get('password')
+
+    # 使用leancloud用户模块登陆
+    user = leancloud.User()
+    user.login(mobile, password)
+
+    if is_PRD:
+            user.refresh_session_token()
+
+    return {
+        "token": leancloud.User.get_current().get_session_token(),
+        "isFirstLogin": False,
+        "userId": user.id,
+        "userInfo": get_user_info_by_user_id(user.id)
     }
 
