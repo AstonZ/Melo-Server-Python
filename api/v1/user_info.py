@@ -2,7 +2,6 @@ import leancloud
 from flask import *
 import comm
 import model
-# import
 
 bp = Blueprint('user_info', __name__)
 

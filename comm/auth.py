@@ -27,10 +27,11 @@ def login_required(f):
 
         resp = f(*args, **kwargs)
         return resp
+    return decorated_function
 
 
 def is_login(user):
     if user is not None:
-        if user.is_authencated():
-            return  True
+        if user.is_authenticated():
+            return True
     return False
